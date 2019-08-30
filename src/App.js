@@ -5,6 +5,8 @@ import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
 import Persik from './panels/Persik';
+import TestPlayer from './panels/tests/TestPlayer';
+import TestResult from './panels/results/TestResult';
 
 class App extends React.Component {
 	constructor(props) {
@@ -38,6 +40,8 @@ class App extends React.Component {
 			<View activePanel={this.state.activePanel}>
 				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
 				<Persik id="persik" go={this.go} />
+				<TestPlayer id="testplayer" go={this.go} />
+				<TestResult id="resultprofile" go={this.go} />
 			</View>
 		);
 	}
