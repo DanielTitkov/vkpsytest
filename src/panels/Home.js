@@ -1,39 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Button, Group, Div, Avatar, PanelHeader } from '@vkontakte/vkui';
+import { Panel, ListItem, Button, Group, Div, Avatar, PanelHeader, List } from '@vkontakte/vkui';
+import TestSnippet from '../components/tests/TestSnippet';
+import { setActivePanel } from '../store/actions/panelActions';
+import { connect } from 'react-redux';
+import { setActiveTest } from '../store/actions/testActions';
 
-const Home = ({ id, go, fetchedUser }) => (
-	<Panel id={id}>
-		<PanelHeader>Example</PanelHeader>
-		{fetchedUser &&
-		<Group title="User Data Fetched with VK Connect">
-			<ListItem
-				before={fetchedUser.photo_200 ? <Avatar src={fetchedUser.photo_200}/> : null}
-				description={fetchedUser.city && fetchedUser.city.title ? fetchedUser.city.title : ''}
-			>
-				{`${fetchedUser.first_name} ${fetchedUser.last_name}`}
-			</ListItem>
-		</Group>}
+const mapDispatchToProps = (dispatch) => {
+    return {
+		setActivePanel: (panel) => dispatch(setActivePanel(panel)),
+		setActiveTest: (test) => dispatch(setActiveTest(test))
+    }
+}
 
-		<Group title="Navigation Example">
-			<Div>
-				<Button size="xl" level="2" onClick={go} data-to="persik">
-					Show me the Persik!
-				</Button>
-			</Div>
-			<Div>
-				<Button size="xl" level="2" onClick={go} data-to="testplayer">
-					Show test player
-				</Button>
-			</Div>
-			<Div>
-				<Button size="xl" level="2" onClick={go} data-to="resultprofile">
-					Show result page
-				</Button>
-			</Div>
-		</Group>
-	</Panel>
-);
+const Home = (props) => {
+	const mockData = {
+		tests: [
+			{title: "ТИПИ", desc: "Тен итем персоналити инвентори. Кароче, короткий тест про личность.", id: 1},
+			{title: "Эм-эм-пи-ай", desc: "Очень длинный тест. Пятьсот вопросов. Или семьсот даже.", id: 2},
+			{title: "Тест Сонди", desc: "Ну и не тест в общем-то, а одна сплошая чемергесина.", id: 3},
+		]	
+	}
+
+	const [ tests, setTests ] = useState(mockData);
+	const { id, go, fetchedUser, setActivePanel } = props;
+	return (
+		<Panel id={id}>
+			<PanelHeader>Example</PanelHeader>
+			{fetchedUser &&
+			<Group title="User Data Fetched with VK Connect">
+				<ListItem
+					before={fetchedUser.photo_200 ? <Avatar src={fetchedUser.photo_200}/> : null}
+					description={fetchedUser.city && fetchedUser.city.title ? fetchedUser.city.title : ''}
+				>
+					{`${fetchedUser.first_name} ${fetchedUser.last_name}`}
+				</ListItem>
+			</Group>}
+
+			<Group title="Avaliable tests">
+				<List>
+					{ tests.tests.length && tests.tests.map(test => {
+						return (
+							<TestSnippet test={ test } key={ test.id } go={ go } /> 
+						)
+					}) }
+				</List>
+
+				<Div>
+					<Button size="xl" level="2" onClick={go} data-to="persik">
+						Show me the Persik!
+					</Button>
+				</Div>
+				<Div>
+					<Button size="xl" level="2" onClick={() => setActivePanel("testlayer")} data-to="testplayer">
+						Show test player
+					</Button>
+				</Div>
+				<Div>
+					<Button size="xl" level="2" onClick={go} data-to="resultprofile">
+						Show result page
+					</Button>
+				</Div>
+			</Group>
+		</Panel>
+	)
+};
 
 Home.propTypes = {
 	id: PropTypes.string.isRequired,
@@ -48,4 +79,4 @@ Home.propTypes = {
 	}),
 };
 
-export default Home;
+export default connect(null, mapDispatchToProps) (Home);
