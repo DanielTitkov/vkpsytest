@@ -4,7 +4,6 @@ import { View } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
-import Persik from './panels/Persik';
 import TestPlayer from './panels/tests/TestPlayer';
 import TestResult from './panels/results/TestResult';
 import { connect } from 'react-redux';
@@ -44,12 +43,9 @@ export default connect(mapStateToProps) (class App extends React.Component {
 	};
 
 	render() {
-		const { activePanel } = this.props;
-		console.log("Active panel (from App component)", activePanel)
 		return (
 			<View activePanel={this.state.activePanel}>
 				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
-				<Persik id="persik" go={this.go} />
 				<TestDetails id="testdetails" go={this.go} />
 				<TestPlayer id="testplayer" go={this.go} />
 				<TestResult id="resultprofile" go={this.go} />

@@ -2,42 +2,64 @@ import 'core-js/features/map';
 import 'core-js/features/set';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import connect from '@vkontakte/vkui-connect';
+import vkconnect from '@vkontakte/vkui-connect';
 import App from './App';
 // import registerServiceWorker from './sw';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore } from 'redux';
 import rootReducer from './store/reducers/rootReducer';
-import thunk from 'redux-thunk';
-import { reduxFirestore, getFirestore } from 'redux-firestore';
-import { reactReduxFirebase, getFirebase } from 'react-redux-firebase';
-import firebaseConfig from './config/firebaseConfig';
+// import thunk from 'redux-thunk';
+// import { reduxFirestore, getFirestore } from 'redux-firestore'; // old
+// import { reactReduxFirebase, getFirebase } from 'react-redux-firebase'; // old
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { createFirestoreInstance } from 'redux-firestore';
+import firebase, { rrfConfig } from './config/firebaseConfig';
+
+import 'firebase/auth'
+import 'firebase/firestore'
 
 // Init VK  Mini App
-connect.send('VKWebAppInit', {});
-
-// Если вы хотите, чтобы ваше веб-приложение работало в оффлайне и загружалось быстрее,
-// расскомментируйте строку с registerServiceWorker();
-// Но не забывайте, что на данный момент у технологии есть достаточно подводных камней
-// Подробнее про сервис воркеры можно почитать тут — https://vk.cc/8MHpmT
-// registerServiceWorker();
+vkconnect.send('VKWebAppInit', {});
 
 const store = createStore(
-    rootReducer, 
-    compose( 
-        applyMiddleware(thunk.withExtraArgument({
-            getFirebase, getFirestore
-        })),
-        reduxFirestore(firebaseConfig),
-        reactReduxFirebase(firebaseConfig, {
-            useFirestoreForProfile: true,
-            userProfile: 'users',
-            attachAuthIsReady: true 
-        })
-    )
+    rootReducer
 );
 
-ReactDOM.render(<Provider store={ store }><App /></Provider>, document.getElementById('root'));
+// old
+// const store = createStore(
+//     rootReducer, 
+//     compose( 
+//         applyMiddleware(thunk.withExtraArgument({
+//             getFirebase, getFirestore
+//         })),
+//         reduxFirestore(firebaseConfig),
+//         reactReduxFirebase(firebaseConfig, {
+//             useFirestoreForProfile: true,
+//             userProfile: 'users',
+//             attachAuthIsReady: true 
+//         })
+//     )
+// );
+
+const rrfProps = {
+    firebase,
+    config: rrfConfig,
+    dispatch: store.dispatch,
+    createFirestoreInstance
+}
+
+const VkPsyTests = () => (
+    <Provider store={ store }>
+        <ReactReduxFirebaseProvider { ...rrfProps }>
+            <App />
+        </ReactReduxFirebaseProvider>
+    </Provider>
+);
+
+ReactDOM.render(
+    <VkPsyTests />, document.getElementById('root')
+);
+
 // store.firebaseAuthIsReady.then(() => {
 //     ReactDOM.render(<Provider store={ store }><App /></Provider>, document.getElementById('root'));
 //     serviceWorker.unregister();

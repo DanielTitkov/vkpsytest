@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Group, Avatar, PanelHeader, List } from '@vkontakte/vkui';
+import { Panel, ListItem, Group, Avatar, PanelHeader, List, Spinner } from '@vkontakte/vkui';
 import TestSnippet from '../components/tests/TestSnippet';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { setActiveTest } from '../store/actions/testActions';
+// import { firebaseConnect } from 'react-redux-firebase'; // ??? 
+import { firestoreConnect } from 'react-redux-firebase';
+
+const mapStateToProps = (state) => {
+	return {
+		tests: state.firestore.ordered.tests
+	}
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -22,8 +31,9 @@ const Home = (props) => {
 		]	
 	}
 
-	const [ tests, setTests ] = useState(mockData);
-	const { id, go, fetchedUser, setActivePanel } = props;
+	// const [ tests, setTests ] = useState(mockData);
+	const { id, go, fetchedUser, setActivePanel, tests } = props;
+	console.log(props)
 	return (
 		<Panel id={id}>
 			<PanelHeader>Example</PanelHeader>
@@ -39,11 +49,17 @@ const Home = (props) => {
 
 			<Group title="Avaliable tests">
 				<List>
-					{ tests.tests.length && tests.tests.map(test => {
-						return (
-							<TestSnippet test={ test } key={ test.id } go={ go } /> 
-						)
-					}) }
+					{ tests ? (
+						tests.length && tests.map(test => {
+							return (
+								<TestSnippet test={ test } key={ test.id } go={ go } /> 
+							)
+						}) 
+					) : (
+						<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+							<Spinner size="regular" style={{ marginTop: 20 }} />
+						</div>
+					) }
 				</List>
 			</Group>
 		</Panel>
@@ -63,4 +79,16 @@ Home.propTypes = {
 	}),
 };
 
-export default connect(null, mapDispatchToProps) (Home);
+export default compose(
+	connect(mapStateToProps, mapDispatchToProps),
+	firestoreConnect([
+		{ collection: "tests" }
+	])
+) (Home);
+
+// export default compose(
+// 	firestoreConnect(() => ['tests']), // or { collection: 'todos' }
+// 	connect((state, props) => ({
+// 	  tests: state.firestore.ordered.tests
+// 	}))
+//    )(Home)

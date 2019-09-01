@@ -15,6 +15,8 @@ const firebaseConfig = {
 
   // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.firestore().settings({})
+firebase.firestore()
 
 export default firebase;
+
+export const rrfConfig = { userProfile: 'users' } // react-redux-firebase config
