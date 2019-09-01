@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Button, Group, Div, Avatar, PanelHeader, List } from '@vkontakte/vkui';
+import { Panel, ListItem, Group, Avatar, PanelHeader, List } from '@vkontakte/vkui';
 import TestSnippet from '../components/tests/TestSnippet';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
@@ -45,22 +45,6 @@ const Home = (props) => {
 						)
 					}) }
 				</List>
-
-				<Div>
-					<Button size="xl" level="2" onClick={go} data-to="persik">
-						Show me the Persik!
-					</Button>
-				</Div>
-				<Div>
-					<Button size="xl" level="2" onClick={() => setActivePanel("testlayer")} data-to="testplayer">
-						Show test player
-					</Button>
-				</Div>
-				<Div>
-					<Button size="xl" level="2" onClick={go} data-to="resultprofile">
-						Show result page
-					</Button>
-				</Div>
 			</Group>
 		</Panel>
 	)

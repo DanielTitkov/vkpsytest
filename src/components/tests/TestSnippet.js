@@ -12,7 +12,12 @@ const mapDispatchToProps = (dispatch) => {
 function TestSnippet(props) {
     const { test, go, setActiveTest } = props;
     return (
-        <Cell description={ test.desc } expandable onClick={ (e) => {setActiveTest(test); go(e);}  } data-to="testplayer" indicator="Подробнее">
+        <Cell 
+            description={ test.desc } 
+            expandable onClick={ (e) => {setActiveTest(test); go(e);}  } 
+            data-to="testdetails" 
+            indicator="Подробнее"
+        >
             { test.title }
         </Cell>
     )
