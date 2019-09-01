@@ -23,15 +23,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const Home = (props) => {
-	const mockData = {
-		tests: [
-			{title: "ТИПИ", desc: "Тен итем персоналити инвентори. Кароче, короткий тест про личность.", id: 1},
-			{title: "Эм-эм-пи-ай", desc: "Очень длинный тест. Пятьсот вопросов. Или семьсот даже.", id: 2},
-			{title: "Тест Сонди", desc: "Ну и не тест в общем-то, а одна сплошая чемергесина.", id: 3},
-		]	
-	}
-
-	// const [ tests, setTests ] = useState(mockData);
 	const { id, go, fetchedUser, setActivePanel, tests } = props;
 	console.log(props)
 	return (
@@ -85,10 +76,3 @@ export default compose(
 		{ collection: "tests" }
 	])
 ) (Home);
-
-// export default compose(
-// 	firestoreConnect(() => ['tests']), // or { collection: 'todos' }
-// 	connect((state, props) => ({
-// 	  tests: state.firestore.ordered.tests
-// 	}))
-//    )(Home)

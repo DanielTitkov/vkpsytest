@@ -6,11 +6,11 @@ import vkconnect from '@vkontakte/vkui-connect';
 import App from './App';
 // import registerServiceWorker from './sw';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './store/reducers/rootReducer';
-// import thunk from 'redux-thunk';
-// import { reduxFirestore, getFirestore } from 'redux-firestore'; // old
-// import { reactReduxFirebase, getFirebase } from 'react-redux-firebase'; // old
+
+import thunk from 'redux-thunk';
+
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 import { createFirestoreInstance } from 'redux-firestore';
 import firebase, { rrfConfig } from './config/firebaseConfig';
@@ -22,7 +22,8 @@ import 'firebase/firestore'
 vkconnect.send('VKWebAppInit', {});
 
 const store = createStore(
-    rootReducer
+    rootReducer,
+    applyMiddleware(thunk)
 );
 
 // old
