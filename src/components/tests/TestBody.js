@@ -1,53 +1,41 @@
 import React, { useState } from 'react';
 import TestItemLikert from './TestItemLikert';
+import { connect } from 'react-redux';
 
-export default function TestBody() {
-    const testData = {
-        items: [
-            {
-                content: "Кто я - тварь дрожащая или право имею?",
-                id: 1,
-                response: null,
-                scale: {
-                    min: 0,
-                    max: 4,
-                    minLabel: "Тварь дрожащая",
-                    maxLabel: "Право имею"
-                }
-            },
-            {
-                content: "Я рыбы отведал и пали покровы, я видел сквозь марево дня как движется по небу витязь багровый, чье око взыскует меня.",
-                id: 2,
-                response: null,
-                scale: {
-                    min: 0,
-                    max: 4,
-                    minLabel: "Не согласен",
-                    maxLabel: "Согласен"
-                }
-            }
-        ],
-        id: 1,
-        type: "likert"
-    }
-    const [ test, setTest ] = useState(testData);
+const mapStateToProps = (state) => {
+	return {
+		activeTest: state.test.activeTest
+	}
+}
+
+function TestBody(props) {
+    const { activeTest } = props;
+    const [ testResponse, setTestResponse ] = useState({
+        testId: activeTest.id,
+        items: activeTest.items.map(item => ({
+            id: item.id,
+            response: null    
+        }))
+    });
 
     const handleResponse = (itemId, response) => {
-        setTest({
-            ...test,
-            items: test.items.map(item => {
+        setTestResponse({
+            ...testResponse,
+            testId: activeTest.id,
+            items: testResponse.items.map(item => {
                 return item.id === itemId ? {...item, response: response} : {...item}
             })
         });
     }
     
-    return test.items.length ? (
+    return activeTest.items.length ? (
         <div>
-            { test.items.map(item => {
+            { activeTest.items.map(item => {
                 return <TestItemLikert 
                     item={ item } 
                     handleResponse={ handleResponse } 
-                    key={ item.id } 
+                    key={ item.id }
+                    response={ testResponse.items.filter(ir => ir.id === item.id ) }
                 /> 
             }) }
         </div>
@@ -57,3 +45,5 @@ export default function TestBody() {
         </div>
     )
 }
+
+export default connect(mapStateToProps, null) (TestBody);

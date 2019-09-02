@@ -8,3 +8,13 @@
     display: block;
     margin: 10px 5px 40px;
 }
+
+.test-snippet-title {
+    margin: 0px;
+    font-weight: bold;
+}
+
+.test-snippet-desc {
+    margin: 0px;
+    font-size: 0.9em;
+}

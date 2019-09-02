@@ -73,6 +73,6 @@ Home.propTypes = {
 export default compose(
 	connect(mapStateToProps, mapDispatchToProps),
 	firestoreConnect([
-		{ collection: "tests" }
+		{ collection: "tests", limit: 5 }
 	])
 ) (Home);

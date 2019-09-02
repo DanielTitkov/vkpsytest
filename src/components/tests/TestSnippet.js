@@ -13,12 +13,13 @@ function TestSnippet(props) {
     const { test, go, setActiveTest } = props;
     return (
         <Cell 
-            description={ test.desc } 
+            description={ "Количество пунктов: " + test.items.length }
             expandable onClick={ (e) => {setActiveTest(test); go(e);}  } 
             data-to="testdetails" 
             indicator="Подробнее"
         >
-            { test.title }
+            <p className="test-snippet-title">{ test.title }</p>
+            <p className="test-snippet-desc">{ test.desc } </p>
         </Cell>
     )
 }

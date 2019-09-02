@@ -15,7 +15,7 @@ export default function TestItemLikert(props) {
                 // value={Number(this.state.value2)}
                 onChange={value => {handleResponse(item.id, value)}}
             />
-            <b>Response: { item.response }</b>
+            <b>Response: { props.response[0].response }</b>
         </div>
     )
 }

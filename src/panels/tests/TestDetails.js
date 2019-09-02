@@ -1,5 +1,5 @@
 import React from 'react';
-import {Panel, PanelHeader, HeaderButton, platform, Div, IOS, Button } from '@vkontakte/vkui';
+import {Panel, PanelHeader, HeaderButton, platform, Div, IOS, Button, Group, List, Cell } from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import PropTypes from 'prop-types';
@@ -21,8 +21,22 @@ function TestDetails(props) {
                     {osname === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
                 </HeaderButton>}
             >
-                Test Details: { activeTest }
+                Test Details: { activeTest.title }
             </PanelHeader>
+            <Group title="Описание">
+                <List>
+                    <Cell multiline>
+                        { activeTest.details.about }
+                    </Cell>
+                </List>
+            </Group>
+            <Group title="Инструкция">
+                <List>
+                    <Cell multiline>
+                        { activeTest.details.instruction }
+                    </Cell>
+                </List>
+            </Group>
             <Div>
                 <Button size="xl" level="2" onClick={go} data-to="testplayer">
                     Пройти тест! 

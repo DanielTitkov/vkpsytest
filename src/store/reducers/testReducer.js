@@ -5,8 +5,7 @@ const initState = {
 const testReducer = (state=initState, action) => {
     switch (action.type) {
         case "SET_ACTIVE_TEST":
-            console.log("Setting active panel...", action.test.id);
-            return {activeTest: action.test.id};
+            return {activeTest: action.test};
         default:
             return state;
     }

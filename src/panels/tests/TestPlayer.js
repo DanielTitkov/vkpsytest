@@ -22,7 +22,7 @@ function TestPlayer(props) {
 					{osname === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
 				</HeaderButton>}
 			>
-				Test Player: { activeTest }
+				Test Player: { activeTest.title }
 			</PanelHeader>
 			<Div>
 				<TestBody />
