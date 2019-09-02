@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import TestItemLikert from './TestItemLikert';
 import { connect } from 'react-redux';
+import { updateActiveTestResponse } from '../../store/actions/testActions';
 
 const mapStateToProps = (state) => {
 	return {
@@ -8,34 +9,25 @@ const mapStateToProps = (state) => {
 	}
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateActiveTestResponse: (response) => dispatch(updateActiveTestResponse(response))
+    }
+}
+
 function TestBody(props) {
     const { activeTest } = props;
-    const [ testResponse, setTestResponse ] = useState({
-        testId: activeTest.id,
-        items: activeTest.items.map(item => ({
-            id: item.id,
-            response: null    
-        }))
-    });
-
     const handleResponse = (itemId, response) => {
-        setTestResponse({
-            ...testResponse,
-            testId: activeTest.id,
-            items: testResponse.items.map(item => {
-                return item.id === itemId ? {...item, response: response} : {...item}
-            })
-        });
+        updateActiveTestResponse(itemId, response);
     }
     
     return activeTest.items.length ? (
         <div>
             { activeTest.items.map(item => {
+                console.log(item)
                 return <TestItemLikert 
                     item={ item } 
-                    handleResponse={ handleResponse } 
                     key={ item.id }
-                    response={ testResponse.items.filter(ir => ir.id === item.id ) }
                 /> 
             }) }
         </div>
@@ -46,4 +38,4 @@ function TestBody(props) {
     )
 }
 
-export default connect(mapStateToProps, null) (TestBody);
+export default connect(mapStateToProps, mapDispatchToProps) (TestBody);
