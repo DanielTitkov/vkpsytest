@@ -17,14 +17,10 @@ const mapDispatchToProps = (dispatch) => {
 
 function TestBody(props) {
     const { activeTest } = props;
-    const handleResponse = (itemId, response) => {
-        updateActiveTestResponse(itemId, response);
-    }
     
     return activeTest.items.length ? (
         <div>
             { activeTest.items.map(item => {
-                console.log(item)
                 return <TestItemLikert 
                     item={ item } 
                     key={ item.id }
