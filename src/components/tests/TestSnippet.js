@@ -1,7 +1,13 @@
 import React from 'react';
-import { Cell } from '@vkontakte/vkui';
+import { Cell, Alert } from '@vkontakte/vkui';
 import { setActiveTest } from '../../store/actions/testActions';
 import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => {
+	return {
+		activeTest: state.test.activeTest
+	}
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -10,11 +16,36 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function TestSnippet(props) {
-    const { test, go, setActiveTest } = props;
+    const { test, go, setActiveTest, activeTest, openPopout, closePopout } = props;
+    const popout = <Alert
+        actions={[
+            {
+                title: 'Отмена',
+                autoclose: true,
+                style: 'cancel'
+            },
+            {
+                title: 'Открыть!',
+                autoclose: true,
+                action: () => {setActiveTest(test); go({currentTarget: {dataset: {to: "testdetails"}}});},
+            }
+        ]}
+        onClose={closePopout}
+    >
+        <h2>Подтвердите действие</h2>
+        <p>У вас уже открыт другой тест. Если сейчас откроете новый, то ответы в старом не сохранятся. Открыть?</p>
+    </Alert>
+
     return (
         <Cell 
             description={ "Количество пунктов: " + test.items.length }
-            expandable onClick={ (e) => {setActiveTest(test); go(e);}  } 
+            expandable onClick={ 
+                activeTest && activeTest.id !== test.id ? (
+                    () => openPopout(popout)
+                ) : (
+                    (e) => {setActiveTest(test); go(e);}
+                )
+            } 
             data-to="testdetails" 
             indicator="Подробнее"
         >
@@ -24,4 +55,4 @@ function TestSnippet(props) {
     )
 }
 
-export default connect(null, mapDispatchToProps) (TestSnippet);
+export default connect(mapStateToProps, mapDispatchToProps) (TestSnippet);

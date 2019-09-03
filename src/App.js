@@ -22,8 +22,23 @@ export default connect(mapStateToProps) (class App extends React.Component {
 		this.state = {
 			activePanel: 'home',
 			fetchedUser: null,
+			popout: null,
 		};
 	}
+
+	openPopout = (popout) => {
+		this.setState({ 
+			...this.state,
+			popout: popout
+		});
+	  }
+	
+	closePopout = () => {
+		this.setState({ 
+			...this.state,
+			popout: null
+		});
+	  }
 
 	componentDidMount() {
 		vkconnect.subscribe((e) => {
@@ -44,8 +59,14 @@ export default connect(mapStateToProps) (class App extends React.Component {
 
 	render() {
 		return (
-			<View activePanel={this.state.activePanel}>
-				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
+			<View popout={this.state.popout} activePanel={this.state.activePanel}>
+				<Home 
+					id="home" 
+					fetchedUser={this.state.fetchedUser} 
+					go={this.go} 
+					openPopout={this.openPopout} 
+					closePopout={this.closePopout} 
+				/>
 				<TestDetails id="testdetails" go={this.go} />
 				<TestPlayer id="testplayer" go={this.go} />
 				<TestResult id="resultprofile" go={this.go} />

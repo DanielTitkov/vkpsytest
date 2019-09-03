@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TestItemLikert from './TestItemLikert';
 import { connect } from 'react-redux';
 import { updateActiveTestResponse } from '../../store/actions/testActions';

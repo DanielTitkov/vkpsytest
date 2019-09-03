@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Group, Avatar, PanelHeader, List, Spinner } from '@vkontakte/vkui';
+import { Panel, ListItem, Group, Avatar, PanelHeader, List, Spinner, Cell, Button } from '@vkontakte/vkui';
 import TestSnippet from '../components/tests/TestSnippet';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
@@ -11,7 +11,8 @@ import { firestoreConnect } from 'react-redux-firebase';
 
 const mapStateToProps = (state) => {
 	return {
-		tests: state.firestore.ordered.tests
+		tests: state.firestore.ordered.tests,
+		activeTest: state.test.activeTest
 	}
 }
 
@@ -23,11 +24,11 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const Home = (props) => {
-	const { id, go, fetchedUser, setActivePanel, tests } = props;
-	console.log(props)
+	const { id, go, fetchedUser, tests, activeTest, openPopout, closePopout } = props;
 	return (
 		<Panel id={id}>
-			<PanelHeader>Example</PanelHeader>
+			<PanelHeader>VK Psy Test</PanelHeader>
+
 			{fetchedUser &&
 			<Group title="User Data Fetched with VK Connect">
 				<ListItem
@@ -38,12 +39,43 @@ const Home = (props) => {
 				</ListItem>
 			</Group>}
 
+			{activeTest && 
+			<Group title="Активный тест">
+				<List>
+					<Cell 
+						before={<Avatar size={72} />}
+						multiline
+						size='l'
+						description={ 
+							"Вопросов с ответами: " 
+							+ activeTest.items.filter(i=>i.response).length 
+							+ " из " 
+							+ activeTest.items.length
+						}
+						bottomContent={
+							<div>
+								<Button onClick={go} data-to="testplayer">Продолжить</Button>
+							</div>
+						}
+					>
+						{ activeTest.title }
+					</Cell>
+				</List>
+			</Group>
+			}
+
 			<Group title="Avaliable tests">
 				<List>
 					{ tests ? (
 						tests.length && tests.map(test => {
 							return (
-								<TestSnippet test={ test } key={ test.id } go={ go } /> 
+								<TestSnippet 
+									test={ test } 
+									key={ test.id } 
+									go={ go } 
+									openPopout={ openPopout } 
+									closePopout={ closePopout }
+								/> 
 							)
 						}) 
 					) : (
@@ -53,6 +85,7 @@ const Home = (props) => {
 					) }
 				</List>
 			</Group>
+			{/* <Button onClick={openPopout}>Popuot!</Button> */}
 		</Panel>
 	)
 };
