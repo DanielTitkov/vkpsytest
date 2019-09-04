@@ -85,7 +85,6 @@ const Home = (props) => {
 					) }
 				</List>
 			</Group>
-			{/* <Button onClick={openPopout}>Popuot!</Button> */}
 		</Panel>
 	)
 };
