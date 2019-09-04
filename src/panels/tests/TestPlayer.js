@@ -1,5 +1,5 @@
 import React from 'react';
-import {Panel, PanelHeader, HeaderButton, platform, Div, IOS} from '@vkontakte/vkui';
+import {Panel, PanelHeader, HeaderButton, InfoRow, Progress, platform, Div, IOS, FixedLayout} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import PropTypes from 'prop-types';
@@ -15,6 +15,7 @@ const mapStateToProps = (state) => {
 
 function TestPlayer(props) {
 	const { activeTest } = props;
+	const testProgress = activeTest.items.filter(i=>i.response).length / activeTest.items.length * 100;
     return (
         <Panel id={props.id}>
 			<PanelHeader
@@ -32,6 +33,13 @@ function TestPlayer(props) {
 					Show result page
 				</Button>
 			</Div> */}
+			<FixedLayout vertical="bottom">
+				<Div>
+					<InfoRow title="Test progress">
+						<Progress value={ testProgress } />
+					</InfoRow> 
+				</Div>  
+			</FixedLayout>
 		</Panel>
     )
 }
