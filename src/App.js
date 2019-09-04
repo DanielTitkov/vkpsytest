@@ -31,20 +31,21 @@ export default connect(mapStateToProps) (class App extends React.Component {
 			...this.state,
 			popout: popout
 		});
-	  }
+	}
 	
 	closePopout = () => {
 		this.setState({ 
 			...this.state,
 			popout: null
 		});
-	  }
+	}
 
 	componentDidMount() {
 		vkconnect.subscribe((e) => {
 			switch (e.detail.type) {
 				case 'VKWebAppGetUserInfoResult':
 					this.setState({ fetchedUser: e.detail.data });
+					console.log(this.state.fetchedUser);
 					break;
 				default:
 					console.log(e.detail.type);
@@ -58,19 +59,27 @@ export default connect(mapStateToProps) (class App extends React.Component {
 	};
 
 	render() {
-		return (
-			<View popout={this.state.popout} activePanel={this.state.activePanel}>
-				<Home 
-					id="home" 
-					fetchedUser={this.state.fetchedUser} 
-					go={this.go} 
-					openPopout={this.openPopout} 
-					closePopout={this.closePopout} 
-				/>
-				<TestDetails id="testdetails" go={this.go} />
-				<TestPlayer id="testplayer" go={this.go} />
-				<TestResult id="resultprofile" go={this.go} />
-			</View>
-		);
+		if (this.state.fetchedUser) {
+			return (
+				<View popout={this.state.popout} activePanel={this.state.activePanel}>
+					<Home 
+						id="home" 
+						fetchedUser={this.state.fetchedUser} 
+						go={this.go} 
+						openPopout={this.openPopout} 
+						closePopout={this.closePopout} 
+					/>
+					<TestDetails id="testdetails" go={this.go} />
+					<TestPlayer id="testplayer" go={this.go} />
+					<TestResult id="resultprofile" go={this.go} />
+				</View>
+			)
+		} else {
+			return (
+				<div>
+					<h1>This app can be used only as VK Mini App</h1>
+				</div>
+			)
+		}
 	}
 })

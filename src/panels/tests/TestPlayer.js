@@ -34,7 +34,7 @@ function TestPlayer(props) {
 				</Button>
 			</Div> */}
 			<FixedLayout vertical="bottom">
-				<Div>
+				<Div style={{background: "#fafafa", opacity: 0.9}}>
 					<InfoRow title="Test progress">
 						<Progress value={ testProgress } />
 					</InfoRow> 
