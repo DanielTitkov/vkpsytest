@@ -59,7 +59,7 @@ export default connect(mapStateToProps) (class App extends React.Component {
 	};
 
 	render() {
-		if (this.state.fetchedUser) {
+		if (this.state.fetchedUser || 1) {
 			return (
 				<View popout={this.state.popout} activePanel={this.state.activePanel}>
 					<Home 

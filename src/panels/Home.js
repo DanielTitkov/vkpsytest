@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Panel, ListItem, Group, Avatar, PanelHeader, List, Spinner, Cell, Button } from '@vkontakte/vkui';
 import TestSnippet from '../components/tests/TestSnippet';
@@ -8,10 +8,12 @@ import { compose } from 'redux';
 import { setActiveTest } from '../store/actions/testActions';
 // import { firebaseConnect } from 'react-redux-firebase'; // ??? 
 import { firestoreConnect } from 'react-redux-firebase';
+import { getInventories } from '../store/actions/inventoryActions';
 
 const mapStateToProps = (state) => {
 	return {
 		tests: state.firestore.ordered.tests,
+		inventories: state.inventory.inventories,
 		activeTest: state.test.activeTest
 	}
 }
@@ -19,12 +21,16 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
 		setActivePanel: (panel) => dispatch(setActivePanel(panel)),
-		setActiveTest: (test) => dispatch(setActiveTest(test))
+		setActiveTest: (test) => dispatch(setActiveTest(test)),
+		getInventories: () => dispatch(getInventories())
     }
 }
 
 const Home = (props) => {
-	const { id, go, fetchedUser, tests, activeTest, openPopout, closePopout } = props;
+	const { id, go, fetchedUser, tests, activeTest, openPopout, closePopout, inventories } = props;
+	useEffect(() => {
+		props.getInventories()
+	}, []);
 	return (
 		<Panel id={id}>
 			<PanelHeader>VK Psy Test</PanelHeader>
@@ -76,6 +82,29 @@ const Home = (props) => {
 									openPopout={ openPopout } 
 									closePopout={ closePopout }
 								/> 
+							)
+						}) 
+					) : (
+						<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+							<Spinner size="regular" style={{ marginTop: 20 }} />
+						</div>
+					) }
+				</List>
+			</Group>
+
+			<Group title="Avaliable inventories">
+				<List>
+					{ inventories ? (
+						inventories.length && inventories.map(inventory => {
+							return (
+								// <TestSnippet 
+								// 	test={ test } 
+								// 	key={ test.id } 
+								// 	go={ go } 
+								// 	openPopout={ openPopout } 
+								// 	closePopout={ closePopout }
+								// /> 
+								<div>{ inventory.title }</div>
 							)
 						}) 
 					) : (
