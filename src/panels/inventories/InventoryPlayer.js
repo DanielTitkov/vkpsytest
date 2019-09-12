@@ -3,8 +3,8 @@ import {Panel, PanelHeader, HeaderButton, InfoRow, Progress, platform, Div, IOS,
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import PropTypes from 'prop-types';
-import TestBody from '../../components/tests/TestBody';
 import { connect } from 'react-redux';
+import InventoryBody from '../../components/inventories/InventoryBody';
 
 const osname = platform();
 const mapStateToProps = (state) => {
@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
 	}
 }
 
-function TestPlayer(props) {
+function InventoryPlayer(props) {
 	const { activeTest } = props;
 	const testProgress = activeTest.items.filter(i=>i.response).length / activeTest.items.length * 100;
     return (
@@ -26,7 +26,7 @@ function TestPlayer(props) {
 				Test Player: { activeTest.title }
 			</PanelHeader>
 			<Div>
-				<TestBody />
+				<InventoryBody />
 			</Div>
 			{/* <Div>
 				<Button size="xl" level="2" onClick={go} data-to="resultprofile">
@@ -44,9 +44,9 @@ function TestPlayer(props) {
     )
 }
 
-TestPlayer.propTypes = {
+InventoryPlayer.propTypes = {
 	id: PropTypes.string.isRequired,
 	go: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps) (TestPlayer);
+export default connect(mapStateToProps) (InventoryPlayer);

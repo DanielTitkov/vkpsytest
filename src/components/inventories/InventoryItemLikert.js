@@ -1,17 +1,17 @@
 import React from 'react';
 import { Slider } from '@vkontakte/vkui';
-import './TestItemLikert.css';
-import { updateActiveTestResponse } from '../../store/actions/testActions';
+import './InventoryItemLikert.css';
+import { updateActiveInventoryResponse } from '../../store/actions/inventoryActions';
 import { connect } from "react-redux";
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateActiveTestResponse: (response) => dispatch(updateActiveTestResponse(response))
+        updateActiveInventoryResponse: (response) => dispatch(updateActiveInventoryResponse(response))
     }
 }
 
-function TestItemLikert(props) {
-    const { item, updateActiveTestResponse } = props;
+function InventoryItemLikert(props) {
+    const { item, updateActiveInventoryResponse } = props;
     return (
         <div className="itemWrapper" id={item.id}>
             <h3>{ item.content }</h3>
@@ -21,11 +21,11 @@ function TestItemLikert(props) {
                 min={item.scale.min}
                 max={item.scale.max}
                 value={Number(item.response)}
-                onChange={ value => {updateActiveTestResponse({itemId: item.id, value: value})} }
+                onChange={ value => {updateActiveInventoryResponse({itemId: item.id, value: value})} }
             />
             <b>Response: { item.response }</b>
         </div>
     )
 }
 
-export default connect(null, mapDispatchToProps) (TestItemLikert);
+export default connect(null, mapDispatchToProps) (InventoryItemLikert);

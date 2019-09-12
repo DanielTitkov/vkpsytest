@@ -1,22 +1,22 @@
 import React from 'react';
 import { Cell, Alert } from '@vkontakte/vkui';
-import { setActiveTest } from '../../store/actions/testActions';
+import { setActiveInventory } from '../../store/actions/inventoryActions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
 	return {
-		activeTest: state.test.activeTest
+		activeInventory: state.inventory.activeInventory
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-		setActiveTest: (test) => dispatch(setActiveTest(test))
+		setActiveInventory: (inventory) => dispatch(setActiveInventory(inventory))
     }
 }
 
-function TestSnippet(props) {
-    const { test, go, setActiveTest, activeTest, openPopout, closePopout } = props;
+function InventorySnippet(props) {
+    const { inventory, go, setActiveInventory, activeInventory, openPopout, closePopout } = props;
     const popout = <Alert
         actions={[
             {
@@ -27,7 +27,7 @@ function TestSnippet(props) {
             {
                 title: 'Открыть!',
                 autoclose: true,
-                action: () => {setActiveTest(test); go({currentTarget: {dataset: {to: "testdetails"}}});},
+                action: () => {setActiveInventory(inventory); go({currentTarget: {dataset: {to: "testdetails"}}});},
             }
         ]}
         onClose={closePopout}
@@ -38,21 +38,21 @@ function TestSnippet(props) {
 
     return (
         <Cell 
-            description={ "Количество пунктов: " + test.items.length }
+            description={ "Количество пунктов: " + inventory.questions.length }
             expandable onClick={ 
-                activeTest && activeTest.id !== test.id ? (
+                activeInventory && activeInventory.id !== inventory.id ? (
                     () => openPopout(popout)
                 ) : (
-                    (e) => {setActiveTest(test); go(e);}
+                    (e) => {setActiveInventory(inventory); go(e);}
                 )
             } 
             data-to="testdetails" 
             indicator="Подробнее"
         >
-            <p className="test-snippet-title">{ test.title }</p>
-            <p className="test-snippet-desc">{ test.desc } </p>
+            <p className="inventory-snippet-title">{ inventory.title }</p>
+            <p className="inventory-snippet-desc">{ inventory.description } </p>
         </Cell>
     )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (TestSnippet);
+export default connect(mapStateToProps, mapDispatchToProps) (InventorySnippet);

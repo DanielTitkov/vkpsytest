@@ -1,33 +1,31 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Panel, ListItem, Group, Avatar, PanelHeader, List, Spinner, Cell, Button } from '@vkontakte/vkui';
-import TestSnippet from '../components/tests/TestSnippet';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { setActiveTest } from '../store/actions/testActions';
-// import { firebaseConnect } from 'react-redux-firebase'; // ??? 
+import { getInventories, setActiveInventory } from '../store/actions/inventoryActions';
 import { firestoreConnect } from 'react-redux-firebase';
-import { getInventories } from '../store/actions/inventoryActions';
+import InventorySnippet from '../components/inventories/InventorySnippet';
 
 const mapStateToProps = (state) => {
 	return {
 		tests: state.firestore.ordered.tests,
 		inventories: state.inventory.inventories,
-		activeTest: state.test.activeTest
+		activeInventory: state.inventory.activeInventory
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
 		setActivePanel: (panel) => dispatch(setActivePanel(panel)),
-		setActiveTest: (test) => dispatch(setActiveTest(test)),
+		setActiveInventory: (inventory) => dispatch(setActiveInventory(inventory)),
 		getInventories: () => dispatch(getInventories())
     }
 }
 
 const Home = (props) => {
-	const { id, go, fetchedUser, tests, activeTest, openPopout, closePopout, inventories } = props;
+	const { id, go, fetchedUser, activeInventory, openPopout, closePopout, inventories } = props;
 	useEffect(() => {
 		props.getInventories()
 	}, []);
@@ -45,7 +43,7 @@ const Home = (props) => {
 				</ListItem>
 			</Group>}
 
-			{activeTest && 
+			{activeInventory && 
 			<Group title="Активный тест">
 				<List>
 					<Cell 
@@ -54,9 +52,9 @@ const Home = (props) => {
 						size='l'
 						description={ 
 							"Вопросов с ответами: " 
-							+ activeTest.items.filter(i=>i.response).length 
+							+ activeInventory.items.filter(i=>i.response).length 
 							+ " из " 
-							+ activeTest.items.length
+							+ activeInventory.items.length
 						}
 						bottomContent={
 							<div>
@@ -64,47 +62,24 @@ const Home = (props) => {
 							</div>
 						}
 					>
-						{ activeTest.title }
+						{ activeInventory.title }
 					</Cell>
 				</List>
 			</Group>
 			}
-
-			<Group title="Avaliable tests">
-				<List>
-					{ tests ? (
-						tests.length && tests.map(test => {
-							return (
-								<TestSnippet 
-									test={ test } 
-									key={ test.id } 
-									go={ go } 
-									openPopout={ openPopout } 
-									closePopout={ closePopout }
-								/> 
-							)
-						}) 
-					) : (
-						<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-							<Spinner size="regular" style={{ marginTop: 20 }} />
-						</div>
-					) }
-				</List>
-			</Group>
 
 			<Group title="Avaliable inventories">
 				<List>
 					{ inventories ? (
 						inventories.length && inventories.map(inventory => {
 							return (
-								// <TestSnippet 
-								// 	test={ test } 
-								// 	key={ test.id } 
-								// 	go={ go } 
-								// 	openPopout={ openPopout } 
-								// 	closePopout={ closePopout }
-								// /> 
-								<div>{ inventory.title }</div>
+								<InventorySnippet 
+									inventory={ inventory } 
+									key={ inventory.id } 
+									go={ go } 
+									openPopout={ openPopout } 
+									closePopout={ closePopout }								
+								/>
 							)
 						}) 
 					) : (

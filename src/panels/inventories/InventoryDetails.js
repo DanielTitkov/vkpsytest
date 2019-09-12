@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 	}
 }
 
-function TestDetails(props) {
+function InventoryDetails(props) {
     const { activeTest, go } = props;
     return (
         <Panel id={props.id}>
@@ -46,9 +46,9 @@ function TestDetails(props) {
     )
 }
 
-TestDetails.propTypes = {
+InventoryDetails.propTypes = {
 	id: PropTypes.string.isRequired,
 	go: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps) (TestDetails);
+export default connect(mapStateToProps) (InventoryDetails);

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 const osname = platform();
 
-export default function TestResult(props) {
+function InventoryResult(props) {
     return (
         <Panel id={props.id}>
 			<PanelHeader
@@ -20,7 +20,9 @@ export default function TestResult(props) {
     )
 }
 
-TestResult.propTypes = {
+InventoryResult.propTypes = {
 	id: PropTypes.string.isRequired,
 	go: PropTypes.func.isRequired,
 };
+
+export default InventoryResult;

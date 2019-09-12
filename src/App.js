@@ -4,10 +4,10 @@ import { View } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
-import TestPlayer from './panels/tests/TestPlayer';
-import TestResult from './panels/results/TestResult';
 import { connect } from 'react-redux';
-import TestDetails from './panels/tests/TestDetails';
+import InventoryDetails from './panels/inventories/InventoryDetails';
+import InventoryPlayer from './panels/inventories/InventoryPlayer';
+import InventoryResult from './panels/results/InventoryResult';
 
 const mapStateToProps = (state) => {
     return {
@@ -69,9 +69,9 @@ export default connect(mapStateToProps) (class App extends React.Component {
 						openPopout={this.openPopout} 
 						closePopout={this.closePopout} 
 					/>
-					<TestDetails id="testdetails" go={this.go} />
-					<TestPlayer id="testplayer" go={this.go} />
-					<TestResult id="resultprofile" go={this.go} />
+					<InventoryDetails id="testdetails" go={this.go} />
+					<InventoryPlayer id="testplayer" go={this.go} />
+					<InventoryResult id="resultprofile" go={this.go} />
 				</View>
 			)
 		} else {
