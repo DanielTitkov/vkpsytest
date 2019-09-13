@@ -11,19 +11,23 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function InventoryItemLikert(props) {
-    const { item, updateActiveInventoryResponse } = props;
+    const { question, response, updateActiveInventoryResponse } = props;
     return (
-        <div className="itemWrapper" id={item.id}>
-            <h3>{ item.content }</h3>
-            <i className="scaleLabel">&larr; { item.scale.minLabel } / { item.scale.maxLabel } &rarr;</i>
+        <div className="itemWrapper" id={question.id}>
+            <h3>{ question.item.content }</h3>
+            <i className="scaleLabel">&larr; { question.display_options.minLabel } / { question.display_options.maxLabel } &rarr;</i>
             <Slider
                 step={1}
-                min={item.scale.min}
-                max={item.scale.max}
-                value={Number(item.response)}
-                onChange={ value => {updateActiveInventoryResponse({itemId: item.id, value: value})} }
+                min={question.display_options.min}
+                max={question.display_options.max}
+                value={Number(response)}
+                onChange={ value => {updateActiveInventoryResponse({
+                    itemId: question.item.id, 
+                    questionId: question.id,
+                    value: value
+                })} }
             />
-            <b>Response: { item.response }</b>
+            <b>Response: { response }</b>
         </div>
     )
 }

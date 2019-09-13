@@ -3,16 +3,14 @@ import PropTypes from 'prop-types';
 import { Panel, ListItem, Group, Avatar, PanelHeader, List, Spinner, Cell, Button } from '@vkontakte/vkui';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { getInventories, setActiveInventory } from '../store/actions/inventoryActions';
-import { firestoreConnect } from 'react-redux-firebase';
 import InventorySnippet from '../components/inventories/InventorySnippet';
 
 const mapStateToProps = (state) => {
 	return {
-		tests: state.firestore.ordered.tests,
 		inventories: state.inventory.inventories,
-		activeInventory: state.inventory.activeInventory
+		activeInventory: state.inventory.activeInventory,
+		activeInventoryResponse: state.inventory.activeInventoryResponse
 	}
 }
 
@@ -25,7 +23,12 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const Home = (props) => {
-	const { id, go, fetchedUser, activeInventory, openPopout, closePopout, inventories } = props;
+	const { 
+		id, go, fetchedUser, activeInventory, 
+		activeInventoryResponse, 
+		openPopout, closePopout, 
+		inventories 
+	} = props;
 	useEffect(() => {
 		props.getInventories()
 	}, []);
@@ -52,9 +55,9 @@ const Home = (props) => {
 						size='l'
 						description={ 
 							"Вопросов с ответами: " 
-							+ activeInventory.items.filter(i=>i.response).length 
+							+ (activeInventoryResponse ? Object.keys(activeInventoryResponse).length : 0)
 							+ " из " 
-							+ activeInventory.items.length
+							+ activeInventory.questions.length
 						}
 						bottomContent={
 							<div>
@@ -106,9 +109,4 @@ Home.propTypes = {
 	}),
 };
 
-export default compose(
-	connect(mapStateToProps, mapDispatchToProps),
-	firestoreConnect([
-		{ collection: "tests", limit: 5 }
-	])
-) (Home);
+export default connect(mapStateToProps, mapDispatchToProps) (Home);

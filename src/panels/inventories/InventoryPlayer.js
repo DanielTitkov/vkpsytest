@@ -9,13 +9,14 @@ import InventoryBody from '../../components/inventories/InventoryBody';
 const osname = platform();
 const mapStateToProps = (state) => {
 	return {
-		activeTest: state.test.activeTest
+		activeInventory: state.inventory.activeInventory,
+		activeInventoryResponse: state.inventory.activeInventoryResponse
 	}
 }
 
 function InventoryPlayer(props) {
-	const { activeTest } = props;
-	const testProgress = activeTest.items.filter(i=>i.response).length / activeTest.items.length * 100;
+	const { activeInventory, activeInventoryResponse } = props;
+	const progress = activeInventoryResponse ? (Object.keys(activeInventoryResponse).length / activeInventory.questions.length * 100) : 0
     return (
         <Panel id={props.id}>
 			<PanelHeader
@@ -23,7 +24,7 @@ function InventoryPlayer(props) {
 					{osname === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
 				</HeaderButton>}
 			>
-				Test Player: { activeTest.title }
+				Test Player: { activeInventory.title }
 			</PanelHeader>
 			<Div>
 				<InventoryBody />
@@ -36,7 +37,7 @@ function InventoryPlayer(props) {
 			<FixedLayout vertical="bottom">
 				<Div style={{background: "#fafafa", opacity: 0.9}}>
 					<InfoRow title="Test progress">
-						<Progress value={ testProgress } />
+						<Progress value={ progress } />
 					</InfoRow> 
 				</Div>  
 			</FixedLayout>

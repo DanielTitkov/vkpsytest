@@ -8,12 +8,12 @@ import { connect } from 'react-redux';
 const osname = platform();
 const mapStateToProps = (state) => {
 	return {
-		activeTest: state.test.activeTest
+		activeInventory: state.inventory.activeInventory
 	}
 }
 
 function InventoryDetails(props) {
-    const { activeTest, go } = props;
+    const { activeInventory, go } = props;
     return (
         <Panel id={props.id}>
             <PanelHeader
@@ -21,19 +21,19 @@ function InventoryDetails(props) {
                     {osname === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
                 </HeaderButton>}
             >
-                Test Details: { activeTest.title }
+                Test Details: { activeInventory.title }
             </PanelHeader>
             <Group title="Описание">
                 <List>
                     <Cell multiline>
-                        { activeTest.details.about }
+                        { activeInventory.details }
                     </Cell>
                 </List>
             </Group>
             <Group title="Инструкция">
                 <List>
                     <Cell multiline>
-                        { activeTest.details.instruction }
+                        { activeInventory.instruction }
                     </Cell>
                 </List>
             </Group>

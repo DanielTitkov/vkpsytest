@@ -1,7 +1,8 @@
 const initState = {
-    inventories: [],
+    inventories: null,
     error: null,
-    activeInventory: null
+    activeInventory: null,
+    activeInventoryResponse: null
 }
 
 const inventoryReducer = (state=initState, action) => {
@@ -19,18 +20,33 @@ const inventoryReducer = (state=initState, action) => {
         case "SET_ACTIVE_INVENTORY":
             return {
                 ...state,
-                activeInventory: action.inventory
+                activeInventory: action.inventory,
+                activeInventoryResponse: state.activeInventory && (action.inventory.id === state.activeInventory.id) ? (
+                    state.activeInventoryResponse
+                ) : (
+                    null
+                )
             };
         case "UPDATE_ACTIVE_INVENTORY_RESPONSE":
             return {
                 ...state,
-                activeInventory: {
-                    ...state.activeInventory,
-                    items: state.activeInventory.items.map(item => {
-                        return item.id === action.response.itemId ? {...item, response: action.response.value} : {...item}
-                    })                   
+                activeInventoryResponse: {
+                    ...state.activeInventoryResponse,
+                    [action.response.questionId]: {
+                        response: action.response.value,
+                        itemId: action.response.itemId
+                    }
                 }
             }
+            // return {
+            //     ...state,
+            //     activeInventory: {
+            //         ...state.activeInventory,
+            //         items: state.activeInventory.items.map(item => {
+            //             return item.id === action.response.itemId ? {...item, response: action.response.value} : {...item}
+            //         })                   
+            //     }
+            // }
         default:
             return state;
     }

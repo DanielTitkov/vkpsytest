@@ -11,13 +11,6 @@ import rootReducer from './store/reducers/rootReducer';
 
 import thunk from 'redux-thunk';
 
-import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
-import { createFirestoreInstance } from 'redux-firestore';
-import firebase, { rrfConfig } from './config/firebaseConfig';
-
-import 'firebase/auth'
-import 'firebase/firestore'
-
 // Init VK  Mini App
 vkconnect.send('VKWebAppInit', {});
 
@@ -26,42 +19,12 @@ const store = createStore(
     applyMiddleware(thunk)
 );
 
-// old
-// const store = createStore(
-//     rootReducer, 
-//     compose( 
-//         applyMiddleware(thunk.withExtraArgument({
-//             getFirebase, getFirestore
-//         })),
-//         reduxFirestore(firebaseConfig),
-//         reactReduxFirebase(firebaseConfig, {
-//             useFirestoreForProfile: true,
-//             userProfile: 'users',
-//             attachAuthIsReady: true 
-//         })
-//     )
-// );
-
-const rrfProps = {
-    firebase,
-    config: rrfConfig,
-    dispatch: store.dispatch,
-    createFirestoreInstance
-}
-
 const VkPsyTests = () => (
     <Provider store={ store }>
-        <ReactReduxFirebaseProvider { ...rrfProps }>
-            <App />
-        </ReactReduxFirebaseProvider>
+        <App />
     </Provider>
 );
 
 ReactDOM.render(
     <VkPsyTests />, document.getElementById('root')
 );
-
-// store.firebaseAuthIsReady.then(() => {
-//     ReactDOM.render(<Provider store={ store }><App /></Provider>, document.getElementById('root'));
-//     serviceWorker.unregister();
-// });

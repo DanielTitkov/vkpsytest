@@ -4,7 +4,8 @@ import InventoryItemLikert from './InventoryItemLikert';
 
 const mapStateToProps = (state) => {
 	return {
-		activeInventory: state.inventory.activeInventory
+        activeInventory: state.inventory.activeInventory,
+        activeInventoryResponse: state.inventory.activeInventoryResponse
 	}
 }
 
@@ -13,14 +14,14 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function InventoryBody(props) {
-    const { activeInventory } = props;
-    
-    return activeInventory.items.length ? (
+    const { activeInventory, activeInventoryResponse } = props;  
+    return activeInventory.questions.length ? (
         <div>
-            { activeInventory.items.map(item => {
+            { activeInventory.questions.map(question => {
                 return <InventoryItemLikert
-                    item={ item } 
-                    key={ item.id }
+                    question={ question }
+                    response={ activeInventoryResponse && activeInventoryResponse[question.id] ? activeInventoryResponse[question.id].response : 0 }
+                    key={ question.id }
                 /> 
             }) }
         </div>

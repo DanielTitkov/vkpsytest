@@ -25,7 +25,7 @@ export const setActiveInventory = (inventory) => {
         const { activeInventory } = getState().inventory;
         dispatch({
             type: "SET_ACTIVE_INVENTORY", 
-            test: activeInventory && (activeInventory.id === inventory.id) ? activeInventory : inventory
+            inventory: activeInventory && (activeInventory.id === inventory.id) ? activeInventory : inventory
         })
     }
 };
