@@ -4,7 +4,11 @@ import axios from 'axios';
 export const getInventories = () => {
     return (dispatch, getState) => {
         const url = appConfig.API_URL;
-        axios.get(url + "inventories/")
+        const { vkquery } = getState().validation;
+        console.log("FROM ACTION", vkquery);
+        axios.get(url + "inventories/", {
+            params: vkquery.query
+        })
         .then(response => {
             dispatch({
                 type: "GET_INVENTORIES_SUCCESS",

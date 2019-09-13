@@ -8,17 +8,24 @@ import { connect } from 'react-redux';
 import InventoryDetails from './panels/inventories/InventoryDetails';
 import InventoryPlayer from './panels/inventories/InventoryPlayer';
 import InventoryResult from './panels/results/InventoryResult';
+import { getValidationQuery } from './store/actions/validationActions';
 
 const mapStateToProps = (state) => {
     return {
-        activePanel: state.panel.activePanel
+		activePanel: state.panel.activePanel,
+		// vkquery: state.validation.vkquery
     }
 }
 
-export default connect(mapStateToProps) (class App extends React.Component {
+const mapDispatchToProps = (dispatch) => {
+    return {
+		getValidationQuery: () => dispatch(getValidationQuery())
+    }
+}
+
+class App extends React.Component {
 	constructor(props) {
 		super(props);
-
 		this.state = {
 			activePanel: 'home',
 			fetchedUser: null,
@@ -41,6 +48,7 @@ export default connect(mapStateToProps) (class App extends React.Component {
 	}
 
 	componentDidMount() {
+		this.props.getValidationQuery();
 		vkconnect.subscribe((e) => {
 			switch (e.detail.type) {
 				case 'VKWebAppGetUserInfoResult':
@@ -82,4 +90,6 @@ export default connect(mapStateToProps) (class App extends React.Component {
 			)
 		}
 	}
-})
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (App);

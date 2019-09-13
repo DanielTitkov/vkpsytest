@@ -3,12 +3,14 @@
 import panelReducer from './panelReducer';
 import { combineReducers } from 'redux';
 import inventoryReducer from './inventoryReducer';
+import validationReducer from './validationReducer';
 
 const rootReducer = combineReducers({
     // auth: authReducer,
     // project: projectReducer,
     panel: panelReducer,
-    inventory: inventoryReducer
+    inventory: inventoryReducer,
+    validation: validationReducer
 });
 
 export default rootReducer;
