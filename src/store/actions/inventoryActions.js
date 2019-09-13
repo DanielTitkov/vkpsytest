@@ -7,7 +7,12 @@ export const getInventories = () => {
         const { vkquery } = getState().validation;
         console.log("FROM ACTION", vkquery);
         axios.get(url + "inventories/", {
-            params: vkquery.query
+            // headers: {
+            //     "X_USERNAME":199
+            // },
+            params: {
+                ...vkquery.query,
+            }
         })
         .then(response => {
             dispatch({
