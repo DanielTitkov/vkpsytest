@@ -33,20 +33,14 @@ const inventoryReducer = (state=initState, action) => {
                 activeInventoryResponse: {
                     ...state.activeInventoryResponse,
                     [action.response.questionId]: {
-                        response: action.response.value,
-                        itemId: action.response.itemId
+                        value: action.response.value,
+                        item: action.response.itemId,
+                        user: 1, // MOCK DATA. maybe not send, extract from login.
+                        question: action.response.questionId,
+                        inventory: state.activeInventory.id // get from reducer state
                     }
                 }
             }
-            // return {
-            //     ...state,
-            //     activeInventory: {
-            //         ...state.activeInventory,
-            //         items: state.activeInventory.items.map(item => {
-            //             return item.id === action.response.itemId ? {...item, response: action.response.value} : {...item}
-            //         })                   
-            //     }
-            // }
         default:
             return state;
     }

@@ -20,7 +20,7 @@ function InventoryBody(props) {
             { activeInventory.questions.map(question => {
                 return <InventoryItemLikert
                     question={ question }
-                    response={ activeInventoryResponse && activeInventoryResponse[question.id] ? activeInventoryResponse[question.id].response : 0 }
+                    response={ activeInventoryResponse && activeInventoryResponse[question.id] ? activeInventoryResponse[question.id].value : 0 }
                     key={ question.id }
                 /> 
             }) }
