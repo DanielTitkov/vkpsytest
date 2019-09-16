@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Group, Avatar, PanelHeader, List, Spinner, Cell, Button } from '@vkontakte/vkui';
+import { Panel, ListItem, Group, Avatar, PanelHeader, Div, List, Spinner, Cell, Button, Snackbar } from '@vkontakte/vkui';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
 import { getInventories, setActiveInventory } from '../store/actions/inventoryActions';
@@ -10,7 +10,8 @@ const mapStateToProps = (state) => {
 	return {
 		inventories: state.inventory.inventories,
 		activeInventory: state.inventory.activeInventory,
-		activeInventoryResponse: state.inventory.activeInventoryResponse
+		activeInventoryResponse: state.inventory.activeInventoryResponse,
+		inventoryError: state.inventory.error,
 	}
 }
 
@@ -27,11 +28,28 @@ const Home = (props) => {
 		id, go, fetchedUser, activeInventory, 
 		activeInventoryResponse, 
 		openPopout, closePopout, 
-		inventories 
+		inventories, inventoryError
 	} = props;
+
+	const [snackbar, setSnackbar] = useState(null);
+
+	const errorSnackbar = <Snackbar
+		layout="vertical"
+		onClose={ () => setSnackbar(null) }
+	>
+		<p>{ inventoryError ? inventoryError.toString() : "Everything is OK" }</p>
+	</Snackbar>
+
+	useEffect(() => {
+		if (inventoryError) {
+			setSnackbar(errorSnackbar)
+		}
+	}, [inventoryError])
+
 	useEffect(() => {
 		props.getInventories()
 	}, []);
+
 	return (
 		<Panel id={id}>
 			<PanelHeader>VK Psy Test</PanelHeader>
@@ -85,13 +103,17 @@ const Home = (props) => {
 								/>
 							)
 						}) 
-					) : (
-						<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-							<Spinner size="regular" style={{ marginTop: 20 }} />
-						</div>
+					) : ( inventoryError ? (
+							<Div><b>Ошибка при загрузке: </b>{ inventoryError.toString() }</Div>
+						) : (
+							<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+								<Spinner size="regular" style={{ marginTop: 20 }} />
+							</div>
+						)
 					) }
 				</List>
 			</Group>
+			{ snackbar }
 		</Panel>
 	)
 };

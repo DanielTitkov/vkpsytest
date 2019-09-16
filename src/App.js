@@ -13,7 +13,6 @@ import { getValidationQuery } from './store/actions/validationActions';
 const mapStateToProps = (state) => {
     return {
 		activePanel: state.panel.activePanel,
-		// vkquery: state.validation.vkquery
     }
 }
 

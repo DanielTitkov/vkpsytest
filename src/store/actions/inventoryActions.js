@@ -44,3 +44,9 @@ export const updateActiveInventoryResponse = (response) => {
         dispatch({ type: "UPDATE_ACTIVE_INVENTORY_RESPONSE", response: response});
     }
 };
+
+export const sendActiveInventoryResponse = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: "SEND_ACTIVE_INVENTORY_RESPONSE_SUCCESS"});
+    }
+}

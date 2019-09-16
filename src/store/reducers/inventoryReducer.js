@@ -35,7 +35,6 @@ const inventoryReducer = (state=initState, action) => {
                     [action.response.questionId]: {
                         value: action.response.value,
                         item: action.response.itemId,
-                        user: 1, // MOCK DATA. maybe not send, extract from login.
                         question: action.response.questionId,
                         inventory: state.activeInventory.id // get from reducer state
                     }
