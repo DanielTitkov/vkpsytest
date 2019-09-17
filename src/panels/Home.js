@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Group, Avatar, PanelHeader, Div, List, Spinner, Cell, Button, Snackbar } from '@vkontakte/vkui';
+import { Panel, ListItem, Group, Avatar, PanelHeader, Div, List, Spinner, Cell, Button } from '@vkontakte/vkui';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
 import { getInventories, setActiveInventory } from '../store/actions/inventoryActions';
 import InventorySnippet from '../components/inventories/InventorySnippet';
+import ErrorSnackbar from '../components/interface/ErrorSnackbar';
 
 const mapStateToProps = (state) => {
 	return {
@@ -32,14 +33,8 @@ const Home = (props) => {
 	} = props;
 
 	const [snackbar, setSnackbar] = useState(null);
-
-	const errorSnackbar = <Snackbar
-		layout="vertical"
-		onClose={ () => setSnackbar(null) }
-	>
-		<p>{ inventoryError ? inventoryError.toString() : "Everything is OK" }</p>
-	</Snackbar>
-
+	const errorSnackbar = <ErrorSnackbar onClose={() => setSnackbar(null)} error={inventoryError} />
+	
 	useEffect(() => {
 		if (inventoryError) {
 			setSnackbar(errorSnackbar)

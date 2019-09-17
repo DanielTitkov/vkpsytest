@@ -37,8 +37,18 @@ const inventoryReducer = (state=initState, action) => {
                         item: action.response.itemId,
                         question: action.response.questionId,
                         inventory: state.activeInventory.id // get from reducer state
+                        // user is set on backend via auth query
                     }
                 }
+            }
+        case "SEND_ACTIVE_INVENTORY_RESPONSE_SUCCESS":
+            return {
+                ...state
+            }
+        case "SEND_ACTIVE_INVENTORY_RESPONSE_ERROR":
+            return {
+                ...state,
+                error: action.error
             }
         default:
             return state;

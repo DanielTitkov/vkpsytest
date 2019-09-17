@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {Panel, PanelHeader, HeaderButton, InfoRow, Progress, platform, Div, IOS, FixedLayout} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import InventoryBody from '../../components/inventories/InventoryBody';
+import InventorySendControl from '../../components/inventories/InventorySendControl';
+import ErrorSnackbar from '../../components/interface/ErrorSnackbar';
 
 const osname = platform();
 const mapStateToProps = (state) => {
 	return {
 		activeInventory: state.inventory.activeInventory,
-		activeInventoryResponse: state.inventory.activeInventoryResponse
+		activeInventoryResponse: state.inventory.activeInventoryResponse,
+		inventoryError: state.inventory.error,
 	}
 }
 
 function InventoryPlayer(props) {
-	const { activeInventory, activeInventoryResponse } = props;
+	const { activeInventory, activeInventoryResponse, inventoryError } = props;
+
+	const [snackbar, setSnackbar] = useState(null);
+	const errorSnackbar = <ErrorSnackbar onClose={() => setSnackbar(null)} error={inventoryError} />
+	
+	useEffect(() => {
+		if (inventoryError) {
+			setSnackbar(errorSnackbar)
+		}
+	}, [inventoryError])
+
 	const progress = activeInventoryResponse ? (Object.keys(activeInventoryResponse).length / activeInventory.questions.length * 100) : 0
     return (
         <Panel id={props.id}>
@@ -29,11 +42,10 @@ function InventoryPlayer(props) {
 			<Div>
 				<InventoryBody />
 			</Div>
-			{/* <Div>
-				<Button size="xl" level="2" onClick={go} data-to="resultprofile">
-					Show result page
-				</Button>
-			</Div> */}
+			<Div>
+				<InventorySendControl />
+				<div style={{marginBottom: "100px"}}></div>
+			</Div>
 			<FixedLayout vertical="bottom">
 				<Div style={{background: "#fafafa", opacity: 0.9}}>
 					<InfoRow title="Test progress">
@@ -41,6 +53,7 @@ function InventoryPlayer(props) {
 					</InfoRow> 
 				</Div>  
 			</FixedLayout>
+			{ snackbar }
 		</Panel>
     )
 }

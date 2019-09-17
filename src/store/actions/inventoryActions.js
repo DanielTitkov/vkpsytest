@@ -5,11 +5,7 @@ export const getInventories = () => {
     return (dispatch, getState) => {
         const url = appConfig.API_URL;
         const { vkquery } = getState().validation;
-        console.log("FROM ACTION", vkquery);
         axios.get(url + "inventories/", {
-            // headers: {
-            //     "X_USERNAME":199
-            // },
             params: {
                 ...vkquery.query,
             }
@@ -47,6 +43,35 @@ export const updateActiveInventoryResponse = (response) => {
 
 export const sendActiveInventoryResponse = () => {
     return (dispatch, getState) => {
-        dispatch({ type: "SEND_ACTIVE_INVENTORY_RESPONSE_SUCCESS"});
+        const { activeInventory, activeInventoryResponse } = getState().inventory;
+        const { vkquery } = getState().validation;
+        const url = appConfig.API_URL;
+        console.log(Object.values(activeInventoryResponse));
+        axios.post(
+            url + 'responses/', 
+            { foo: "bar" }, 
+            // {
+            //     // headers: {
+            //     //     'Content-Type': 'application/x-www-form-urlencoded',
+            //     //     'Accept': 'application/json',
+            //     // },
+            //     params: {
+            //         ...vkquery.query,
+            //     }
+            // }
+        )
+        .then(response => {
+            dispatch({
+                type: "SEND_ACTIVE_INVENTORY_RESPONSE_SUCCESS",
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            console.log(err.response.data)
+            dispatch({
+                type: "SEND_ACTIVE_INVENTORY_RESPONSE_ERROR",
+                error: err
+            })
+        });
     }
 }
