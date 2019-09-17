@@ -44,21 +44,18 @@ export const updateActiveInventoryResponse = (response) => {
 export const sendActiveInventoryResponse = () => {
     return (dispatch, getState) => {
         const { activeInventory, activeInventoryResponse } = getState().inventory;
+        // check response consistency?
         const { vkquery } = getState().validation;
         const url = appConfig.API_URL;
         console.log(Object.values(activeInventoryResponse));
         axios.post(
             url + 'responses/', 
-            { foo: "bar" }, 
-            // {
-            //     // headers: {
-            //     //     'Content-Type': 'application/x-www-form-urlencoded',
-            //     //     'Accept': 'application/json',
-            //     // },
-            //     params: {
-            //         ...vkquery.query,
-            //     }
-            // }
+            Object.values(activeInventoryResponse), 
+            {
+                params: {
+                    ...vkquery.query,
+                }
+            }
         )
         .then(response => {
             dispatch({
@@ -66,8 +63,6 @@ export const sendActiveInventoryResponse = () => {
             })
         })
         .catch(err => {
-            console.log(err)
-            console.log(err.response.data)
             dispatch({
                 type: "SEND_ACTIVE_INVENTORY_RESPONSE_ERROR",
                 error: err

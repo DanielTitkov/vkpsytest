@@ -14,11 +14,15 @@ const mapStateToProps = (state) => {
 		activeInventory: state.inventory.activeInventory,
 		activeInventoryResponse: state.inventory.activeInventoryResponse,
 		inventoryError: state.inventory.error,
+		activeInventoryStatus: state.inventory.activeInventoryStatus
 	}
 }
 
 function InventoryPlayer(props) {
-	const { activeInventory, activeInventoryResponse, inventoryError } = props;
+	const { 
+		activeInventory, activeInventoryResponse, 
+		inventoryError, activeInventoryStatus
+	} = props;
 
 	const [snackbar, setSnackbar] = useState(null);
 	const errorSnackbar = <ErrorSnackbar onClose={() => setSnackbar(null)} error={inventoryError} />
@@ -28,6 +32,12 @@ function InventoryPlayer(props) {
 			setSnackbar(errorSnackbar)
 		}
 	}, [inventoryError])
+
+	useEffect(() => {
+		if (activeInventoryStatus === "done") {
+			props.go({currentTarget: {dataset: {to: "resultprofile"}}})
+		}
+	}, [activeInventoryStatus])
 
 	const progress = activeInventoryResponse ? (Object.keys(activeInventoryResponse).length / activeInventory.questions.length * 100) : 0
     return (

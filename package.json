@@ -4,6 +4,7 @@
   "description": "",
   "homepage": "https://DanielTitkov.github.io/vkpsytest/",
   "main": "index.js",
+  "proxy": "http://127.0.0.1:8000",
   "scripts": {
     "start": "cross-env PORT=10888 HTTPS=true react-scripts start",
     "build": "react-scripts build",
