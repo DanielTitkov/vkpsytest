@@ -43,7 +43,10 @@ export const updateActiveInventoryResponse = (response) => {
 
 export const sendActiveInventoryResponse = () => {
     return (dispatch, getState) => {
-        const { activeInventory, activeInventoryResponse } = getState().inventory;
+        const { 
+            // activeInventory, 
+            activeInventoryResponse 
+        } = getState().inventory;
         // check response consistency?
         const { vkquery } = getState().validation;
         const url = appConfig.API_URL;
@@ -60,8 +63,7 @@ export const sendActiveInventoryResponse = () => {
             dispatch({
                 type: "SEND_ACTIVE_INVENTORY_RESPONSE_SUCCESS",
             })
-            console.log("RESPONSE SEND SUCCES")
-            dispatch(getActiveInventoryResult())
+            dispatch(getActiveInventoryResult()) // asking server to get/create result for the test
         })
         .catch(err => {
             dispatch({
@@ -74,7 +76,6 @@ export const sendActiveInventoryResponse = () => {
 
 export const getActiveInventoryResult = () => {
     return (dispatch, getState) => {
-        console.log("ASKING FOR RESULT")
         const { activeInventory } = getState().inventory;
         const { vkquery } = getState().validation;
         const url = appConfig.API_URL;  
@@ -90,14 +91,12 @@ export const getActiveInventoryResult = () => {
             }           
         ) 
         .then(response => {
-            console.log("RESULT SUCCES", response.data)
             dispatch({
                 type: "GET_ACTIVE_INVENTORY_RESULT_SUCCESS",
                 result: response.data
             })
         })
         .catch(err => {
-            console.log("RESULT ERROR", err.response.data)
             dispatch({
                 type: "GET_ACTIVE_INVENTORY_RESULT_ERROR",
                 error: err
