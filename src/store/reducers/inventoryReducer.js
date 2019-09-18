@@ -3,7 +3,8 @@ const initState = {
     error: null,
     activeInventory: null,
     activeInventoryResponse: null,
-    activeInventoryStatus: null
+    activeInventoryStatus: null,
+    activeInventoryResult: null,
 }
 
 const inventoryReducer = (state=initState, action) => {
@@ -50,6 +51,16 @@ const inventoryReducer = (state=initState, action) => {
                 activeInventoryStatus: "done"
             }
         case "SEND_ACTIVE_INVENTORY_RESPONSE_ERROR":
+            return {
+                ...state,
+                error: action.error
+            }
+        case "GET_ACTIVE_INVENTORY_RESULT_SUCCESS":
+            return {
+                ...state,
+                activeInventoryResult: action.result
+            }
+        case "GET_ACTIVE_INVENTORY_RESULT_ERROR":
             return {
                 ...state,
                 error: action.error
