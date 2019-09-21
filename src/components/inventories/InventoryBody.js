@@ -9,10 +9,6 @@ const mapStateToProps = (state) => {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return { }
-}
-
 function InventoryBody(props) {
     const { activeInventory, activeInventoryResponse } = props;  
     return activeInventory.questions.length ? (
@@ -32,4 +28,4 @@ function InventoryBody(props) {
     )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (InventoryBody);
+export default connect(mapStateToProps, null) (InventoryBody);

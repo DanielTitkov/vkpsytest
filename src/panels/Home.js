@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Group, Avatar, PanelHeader, Div, List, Spinner, Cell, Button } from '@vkontakte/vkui';
+import { Panel, ListItem, Group, Avatar, PanelHeader } from '@vkontakte/vkui';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
-import { getInventories, setActiveInventory } from '../store/actions/inventoryActions';
-import InventorySnippet from '../components/inventories/InventorySnippet';
 import ErrorSnackbar from '../components/interface/ErrorSnackbar';
+import ActiveInventorySnippet from '../components/inventories/ActiveInventorySnippet';
+import NewInventories from '../components/inventories/NewInventories';
 
 const mapStateToProps = (state) => {
 	return {
 		inventories: state.inventory.inventories,
-		activeInventory: state.inventory.activeInventory,
-		activeInventoryResponse: state.inventory.activeInventoryResponse,
 		inventoryError: state.inventory.error,
 	}
 }
@@ -19,17 +17,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
 		setActivePanel: (panel) => dispatch(setActivePanel(panel)),
-		setActiveInventory: (inventory) => dispatch(setActiveInventory(inventory)),
-		getInventories: () => dispatch(getInventories())
     }
 }
 
 const Home = (props) => {
 	const { 
-		id, go, fetchedUser, activeInventory, 
-		activeInventoryResponse, 
+		id, go, fetchedUser, 
 		openPopout, closePopout, 
-		inventories, inventoryError
+		inventoryError
 	} = props;
 
 	const [snackbar, setSnackbar] = useState(null);
@@ -40,10 +35,6 @@ const Home = (props) => {
 			setSnackbar(errorSnackbar)
 		}
 	}, [inventoryError])
-
-	useEffect(() => {
-		props.getInventories()
-	}, []);
 
 	return (
 		<Panel id={id}>
@@ -59,55 +50,10 @@ const Home = (props) => {
 				</ListItem>
 			</Group>}
 
-			{activeInventory && 
-			<Group title="Активный тест">
-				<List>
-					<Cell 
-						before={<Avatar size={72} />}
-						multiline
-						size='l'
-						description={ 
-							"Вопросов с ответами: " 
-							+ (activeInventoryResponse ? Object.keys(activeInventoryResponse).length : 0)
-							+ " из " 
-							+ activeInventory.questions.length
-						}
-						bottomContent={
-							<div>
-								<Button onClick={go} data-to="testplayer">Продолжить</Button>
-							</div>
-						}
-					>
-						{ activeInventory.title }
-					</Cell>
-				</List>
-			</Group>
-			}
+			<ActiveInventorySnippet go={go} />
 
-			<Group title="Avaliable inventories">
-				<List>
-					{ inventories ? (
-						inventories.length && inventories.map(inventory => {
-							return (
-								<InventorySnippet 
-									inventory={ inventory } 
-									key={ inventory.id } 
-									go={ go } 
-									openPopout={ openPopout } 
-									closePopout={ closePopout }								
-								/>
-							)
-						}) 
-					) : ( inventoryError ? (
-							<Div><b>Ошибка при загрузке: </b>{ inventoryError.toString() }</Div>
-						) : (
-							<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-								<Spinner size="regular" style={{ marginTop: 20 }} />
-							</div>
-						)
-					) }
-				</List>
-			</Group>
+			<NewInventories go={go} openPopout={openPopout} closePopout={closePopout} />					
+
 			{ snackbar }
 		</Panel>
 	)
