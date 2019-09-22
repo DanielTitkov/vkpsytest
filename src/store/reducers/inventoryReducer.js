@@ -20,10 +20,19 @@ const inventoryReducer = (state=initState, action) => {
                 error: action.error
             };
         case "SET_ACTIVE_INVENTORY":
+            if (action.inventory === null) {
+                return {
+                    ...state,
+                    activeInventory: null,
+                    activeInventoryStatus: null, 
+                    activeInventoryResponse: null,
+                    activeInventoryResult: null
+                }
+            }
             return {
                 ...state,
                 activeInventory: action.inventory,
-                activeInventoryStatus: "started",
+                activeInventoryStatus: action.inventory.status ? action.inventory.status : "started",
                 activeInventoryResponse: state.activeInventory && (action.inventory.id === state.activeInventory.id) ? (
                     state.activeInventoryResponse
                 ) : (

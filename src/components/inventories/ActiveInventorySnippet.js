@@ -32,6 +32,7 @@ function ActiveInventorySnippet(props) {
                         }
                     >
                         { activeInventory.title }
+                        <p>Status: { activeInventory.status }</p>
                     </Cell>
                 </List>
             </Group>

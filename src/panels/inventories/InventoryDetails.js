@@ -14,6 +14,7 @@ const mapStateToProps = (state) => {
 
 function InventoryDetails(props) {
     const { activeInventory, go } = props;
+    const inventoryDone = activeInventory.status === "done";
     return (
         <Panel id={props.id}>
             <PanelHeader
@@ -38,8 +39,13 @@ function InventoryDetails(props) {
                 </List>
             </Group>
             <Div>
-                <Button size="xl" level="2" onClick={go} data-to="testplayer">
-                    Пройти тест! 
+                <Button 
+                    size="xl" 
+                    level="2" 
+                    onClick={go} 
+                    data-to={ inventoryDone ? "resultprofile" : "testplayer" } 
+                >
+                    { inventoryDone ? "Смотреть результаты" : "Пройти тест" } 
                 </Button>
             </Div>
         </Panel>

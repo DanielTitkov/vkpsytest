@@ -62,6 +62,8 @@ class App extends React.Component {
 	}
 
 	go = (e) => {
+		console.log("GO", e);
+		console.log(e.currentTarget.dataset.to);
 		this.setState({ activePanel: e.currentTarget.dataset.to })
 	};
 

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Spinner } from '@vkontakte/vkui';
+import { getActiveInventoryResult } from '../../store/actions/inventoryActions';
 
 const mapStateToProps = (state) => {
 	return {
@@ -9,8 +10,19 @@ const mapStateToProps = (state) => {
 	}
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+		getActiveInventoryResult: () => dispatch(getActiveInventoryResult())
+    }
+}
+
 function ResultBody(props) {
-    const { activeInventoryResult } = props;
+    const { activeInventoryResult, getActiveInventoryResult } = props;
+
+    useEffect(() => {
+        getActiveInventoryResult()
+    }, []) // add input? 
+
     return (
         <div>
             { activeInventoryResult ? (
@@ -32,4 +44,4 @@ function ResultBody(props) {
     )
 }
 
-export default connect(mapStateToProps, null) (ResultBody);
+export default connect(mapStateToProps, mapDispatchToProps) (ResultBody);

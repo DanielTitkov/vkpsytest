@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import ErrorSnackbar from '../../components/interface/ErrorSnackbar';
 import { connect } from 'react-redux';
 import ResultBody from '../../components/results/ResultBody';
+import { setActiveInventory } from '../../store/actions/inventoryActions';
 
 const osname = platform();
 
@@ -16,11 +17,18 @@ const mapStateToProps = (state) => {
 	}
 }
 
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setActiveInventory: (inventory) => dispatch(setActiveInventory(inventory))
+	}
+}
+
 function InventoryResult(props) {
 
 	const {
 		activeInventory,
 		inventoryError,
+		setActiveInventory,
 	} = props;
 
 	const [snackbar, setSnackbar] = useState(null);
@@ -32,17 +40,21 @@ function InventoryResult(props) {
 		}
 	}, [inventoryError])
 
+	const handleGoBack = (e) => {
+		props.go(e);
+		setActiveInventory(null); 
+	}
+
     return (
         <Panel id={props.id}>
 			<PanelHeader
-				left={<HeaderButton onClick={props.go} data-to="home">
+				left={<HeaderButton onClick={handleGoBack} data-to="home">
 					{osname === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
 				</HeaderButton>}
 			>
-				Results Profile: { activeInventory.title }
+				Results Profile: { activeInventory && activeInventory.title }
 			</PanelHeader>
 			<Div>
-				{  }
 				<ResultBody />
 			</Div>
 			{ snackbar }
@@ -55,4 +67,4 @@ InventoryResult.propTypes = {
 	go: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, null) (InventoryResult);
+export default connect(mapStateToProps, mapDispatchToProps) (InventoryResult);

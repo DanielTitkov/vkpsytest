@@ -1,9 +1,59 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Group, List, Spinner, Div } from '@vkontakte/vkui';
+import InventorySnippet from './InventorySnippet';
+import { getInventories } from '../../store/actions/inventoryActions';
 
-export default function DoneInventories() {
+const mapStateToProps = (state) => {
+	return {
+		inventories: state.inventory.inventories,
+		inventoryError: state.inventory.error,
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+		getInventories: (done) => dispatch(getInventories(done))
+    }
+}
+
+function DoneInventories(props) {
+    const { 
+        inventories, inventoryError, go,
+        openPopout, closePopout,
+        getInventories
+    } = props;
+
+    useEffect(() => {
+        getInventories(true)
+    }, []);
+
     return (
-        <div>
-            
-        </div>
+        <Group title="Done inventories">
+            <List>
+                { inventories ? (
+                    inventories.length && inventories.map(inventory => {
+                        return (
+                            <InventorySnippet 
+                                inventory={ inventory } 
+                                key={ inventory.id } 
+                                go={ go } 
+                                openPopout={ openPopout } 
+                                closePopout={ closePopout }								
+                            />
+                        )
+                    }) 
+                ) : ( inventoryError ? (
+                        <Div><b>Ошибка при загрузке: </b>{ inventoryError.toString() }</Div>
+                    ) : (
+                        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                            <Spinner size="regular" style={{ marginTop: 20 }} />
+                        </div>
+                    )
+                ) }
+            </List>
+        </Group>
     )
 }
+
+export default connect(mapStateToProps, mapDispatchToProps) (DoneInventories);

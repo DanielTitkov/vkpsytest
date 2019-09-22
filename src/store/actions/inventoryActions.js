@@ -1,14 +1,22 @@
 import appConfig from "../../config/appConfig"
 import axios from 'axios';
 
-export const getInventories = () => {
+export const getInventories = (done=false) => {
     return (dispatch, getState) => {
         const url = appConfig.API_URL;
         const { vkquery } = getState().validation;
-        axios.get(url + "inventories/", {
-            params: {
+        const params = done ? (
+            {
                 ...vkquery.query,
+                progress: "done",
             }
+        ) : (
+            {
+                ...vkquery.query,
+            }         
+        )
+        axios.get(url + "inventories/", {
+            params: params
         })
         .then(response => {
             dispatch({
@@ -28,9 +36,13 @@ export const getInventories = () => {
 export const setActiveInventory = (inventory) => {
     return (dispatch, getState) => {
         const { activeInventory } = getState().inventory;
+        let newInventory = null;
+        if (inventory) {
+            newInventory = activeInventory && (activeInventory.id === inventory.id) ? activeInventory : inventory
+        }
         dispatch({
             type: "SET_ACTIVE_INVENTORY", 
-            inventory: activeInventory && (activeInventory.id === inventory.id) ? activeInventory : inventory
+            inventory: newInventory
         })
     }
 };
@@ -63,7 +75,7 @@ export const sendActiveInventoryResponse = () => {
             dispatch({
                 type: "SEND_ACTIVE_INVENTORY_RESPONSE_SUCCESS",
             })
-            dispatch(getActiveInventoryResult()) // asking server to get/create result for the test
+            // dispatch(getActiveInventoryResult()) // asking server to get/create result for the test
         })
         .catch(err => {
             dispatch({

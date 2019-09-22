@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Group, Avatar, PanelHeader } from '@vkontakte/vkui';
+import { Panel, ListItem, Group, Avatar, PanelHeader, Tabs, TabsItem } from '@vkontakte/vkui';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
 import ErrorSnackbar from '../components/interface/ErrorSnackbar';
 import ActiveInventorySnippet from '../components/inventories/ActiveInventorySnippet';
 import NewInventories from '../components/inventories/NewInventories';
+import DoneInventories from '../components/inventories/DoneInventories';
 
 const mapStateToProps = (state) => {
 	return {
@@ -27,6 +28,7 @@ const Home = (props) => {
 		inventoryError
 	} = props;
 
+	const [activeTab, setActiveTab] = useState("new");
 	const [snackbar, setSnackbar] = useState(null);
 	const errorSnackbar = <ErrorSnackbar onClose={() => setSnackbar(null)} error={inventoryError} />
 	
@@ -52,8 +54,29 @@ const Home = (props) => {
 
 			<ActiveInventorySnippet go={go} />
 
-			<NewInventories go={go} openPopout={openPopout} closePopout={closePopout} />					
+            <Group>
+				<Tabs theme="light">
+					<TabsItem
+						onClick={() => setActiveTab("new")}
+						selected={activeTab === 'new'}
+					>
+						Новые
+					</TabsItem>
+					<TabsItem
+						onClick={() => setActiveTab("done")}
+						selected={activeTab === 'done'}
+					>
+						Готовые
+					</TabsItem>
+				</Tabs>
+            </Group>
 
+			{ activeTab === "done" ? (
+				<DoneInventories go={go} openPopout={openPopout} closePopout={closePopout} />
+			) : (
+				<NewInventories go={go} openPopout={openPopout} closePopout={closePopout} />					
+			) }
+		
 			{ snackbar }
 		</Panel>
 	)
