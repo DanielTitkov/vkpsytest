@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Spinner } from '@vkontakte/vkui';
 import { getActiveInventoryResult } from '../../store/actions/inventoryActions';
+import ProfileChart from './ProfileChart';
 
 const mapStateToProps = (state) => {
 	return {
@@ -25,10 +26,12 @@ function ResultBody(props) {
 
     return (
         <div>
+            <ProfileChart />
             { activeInventoryResult ? (
                 activeInventoryResult.length && activeInventoryResult.map(result => {
                     return (
                         <div key={ result.scale }> 
+                            
                             <p>Scale: { result.title }</p>
                             <p>Raw score: { result.raw }</p>
                             <p>Processed score: { result.value }</p>

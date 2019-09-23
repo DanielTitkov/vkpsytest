@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Panel, PanelHeader, HeaderButton, platform, IOS, Div} from '@vkontakte/vkui';
+import {Panel, PanelHeader, HeaderButton, platform, IOS, Group, List, Cell} from '@vkontakte/vkui';
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 import PropTypes from 'prop-types';
@@ -54,9 +54,13 @@ function InventoryResult(props) {
 			>
 				Results Profile: { activeInventory && activeInventory.title }
 			</PanelHeader>
-			<Div>
-				<ResultBody />
-			</Div>
+            <Group title="Results">
+                <List>
+                    <Cell multiline>
+						<ResultBody />
+                    </Cell>
+                </List>
+            </Group>
 			{ snackbar }
 		</Panel>
     )
