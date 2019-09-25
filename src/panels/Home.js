@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, ListItem, Group, Avatar, PanelHeader, Tabs, TabsItem } from '@vkontakte/vkui';
+import { Panel, Group, PanelHeader, Tabs, TabsItem } from '@vkontakte/vkui';
 import { setActivePanel } from '../store/actions/panelActions';
 import { connect } from 'react-redux';
 import ErrorSnackbar from '../components/interface/ErrorSnackbar';
 import ActiveInventorySnippet from '../components/inventories/ActiveInventorySnippet';
 import NewInventories from '../components/inventories/NewInventories';
 import DoneInventories from '../components/inventories/DoneInventories';
-import { getCurrentUser } from '../store/actions/userActions';
+import UserSnippet from '../components/user/UserSnippet';
 
 const mapStateToProps = (state) => {
 	return {
 		inventories: state.inventory.inventories,
 		inventoryError: state.inventory.error,
+		currentUser: state.user.currentUser,
+		userError: state.user.error,
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
 		setActivePanel: (panel) => dispatch(setActivePanel(panel)),
-		getCurrentUser: () => dispatch(getCurrentUser()),
     }
 }
 
 const Home = (props) => {
 	const { 
-		id, go, fetchedUser, 
+		id, go, 
+		currentUser, userError,
 		openPopout, closePopout, 
 		inventoryError,
-		getCurrentUser,
 	} = props;
 
 	const [activeTab, setActiveTab] = useState("new");
@@ -41,26 +42,11 @@ const Home = (props) => {
 		}
 	}, [inventoryError])
 
-	useEffect(() => {
-		getCurrentUser();
-	}, [])
-
 	return (
 		<Panel id={id}>
 			<PanelHeader>VK Psy Test</PanelHeader>
-
-			{fetchedUser &&
-			<Group title="User Data Fetched with VK Connect">
-				<ListItem
-					before={fetchedUser.photo_200 ? <Avatar src={fetchedUser.photo_200}/> : null}
-					description={fetchedUser.city && fetchedUser.city.title ? fetchedUser.city.title : ''}
-				>
-					{`${fetchedUser.first_name} ${fetchedUser.last_name}`}
-				</ListItem>
-			</Group>}
-
+			<UserSnippet currentUser={ currentUser } />
 			<ActiveInventorySnippet go={go} />
-
             <Group>
 				<Tabs theme="light">
 					<TabsItem

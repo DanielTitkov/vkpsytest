@@ -1,6 +1,5 @@
-import React from 'react';
-import vkconnect from '@vkontakte/vk-connect';
-import { View } from '@vkontakte/vkui';
+import React, { useState, useEffect } from 'react';
+import { View, Spinner, Footer } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
@@ -9,85 +8,66 @@ import InventoryDetails from './panels/inventories/InventoryDetails';
 import InventoryPlayer from './panels/inventories/InventoryPlayer';
 import InventoryResult from './panels/results/InventoryResult';
 import { getValidationQuery } from './store/actions/validationActions';
+import { getCurrentUser } from './store/actions/userActions';
 
 const mapStateToProps = (state) => {
     return {
 		activePanel: state.panel.activePanel,
+		vkquery: state.validation.vkquery,
+
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-		getValidationQuery: () => dispatch(getValidationQuery())
+		getValidationQuery: () => dispatch(getValidationQuery()),
+		getCurrentUser: () => dispatch(getCurrentUser()),
     }
 }
 
-class App extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			activePanel: 'home',
-			fetchedUser: null,
-			popout: null,
-		};
-	}
+const App = props => {
+	const { getValidationQuery, vkquery, getCurrentUser } = props;
+	const [activePanel, setActivePanel] = useState('home');
+	const [popout, setPopout] = useState(null);
 
-	openPopout = (popout) => {
-		this.setState({ 
-			...this.state,
-			popout: popout
-		});
+	const openPopout = (popout) => {
+		setPopout(popout);
 	}
 	
-	closePopout = () => {
-		this.setState({ 
-			...this.state,
-			popout: null
-		});
+	const closePopout = () => {
+		setPopout(null);
 	}
 
-	componentDidMount() {
-		this.props.getValidationQuery();
-		vkconnect.subscribe((e) => {
-			switch (e.detail.type) {
-				case 'VKWebAppGetUserInfoResult':
-					this.setState({ fetchedUser: e.detail.data });
-					// console.log(this.state.fetchedUser);
-					break;
-				default:
-					// console.log(e.detail.type);
-			}
-		});
-		vkconnect.send('VKWebAppGetUserInfo', {});
-	}
+	useEffect(() => {
+		getValidationQuery();
+		getCurrentUser();
+	}, [])
 
-	go = (e) => {
-		this.setState({ activePanel: e.currentTarget.dataset.to })
+	const go = (e) => {
+		setActivePanel(e.currentTarget.dataset.to);
 	};
 
-	render() {
-		if (this.state.fetchedUser || 1) {
-			return (
-				<View popout={this.state.popout} activePanel={this.state.activePanel}>
-					<Home 
-						id="home" 
-						fetchedUser={this.state.fetchedUser} 
-						go={this.go} 
-						openPopout={this.openPopout} 
-						closePopout={this.closePopout} 
-					/>
-					<InventoryDetails id="testdetails" go={this.go} />
-					<InventoryPlayer id="testplayer" go={this.go} />
-					<InventoryResult id="resultprofile" go={this.go} />
-				</View>
-			)
-		} else {
-			return (
-				<div>
-					<h1>This app can be used only as VK Mini App</h1>
-				</div>
-			)
-		}
+	if (vkquery) {
+		return (
+			<View popout={popout} activePanel={activePanel}>
+				<Home 
+					id="home" 
+					go={go} 
+					openPopout={openPopout} 
+					closePopout={closePopout} 
+				/>
+				<InventoryDetails id="testdetails" go={go} />
+				<InventoryPlayer id="testplayer" go={go} />
+				<InventoryResult id="resultprofile" go={go} />
+			</View>
+		)
+	} else {
+		return (
+			<div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+				<Spinner size="large" style={{ marginTop: 20 }} />
+				<Footer>Loading... If this doesn't go away you may be using the app outside of VK</Footer>
+			</div>
+		)
 	}
 }
 

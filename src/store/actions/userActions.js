@@ -4,7 +4,6 @@ import vkconnect from '@vkontakte/vk-connect';
 
 export const getCurrentUser = () => {
     return (dispatch, getState) => {
-        console.log("USER DISPATCH")
         vkconnect.sendPromise('VKWebAppGetUserInfo', {})
         .then(data => {
             dispatch({ type: "GET_VK_USER_SUCCESS", user: data });
