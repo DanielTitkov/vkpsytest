@@ -1,5 +1,5 @@
 import React from 'react';
-import vkconnect from '@vkontakte/vkui-connect';
+import vkconnect from '@vkontakte/vk-connect';
 import { View } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -52,18 +52,16 @@ class App extends React.Component {
 			switch (e.detail.type) {
 				case 'VKWebAppGetUserInfoResult':
 					this.setState({ fetchedUser: e.detail.data });
-					console.log(this.state.fetchedUser);
+					// console.log(this.state.fetchedUser);
 					break;
 				default:
-					console.log(e.detail.type);
+					// console.log(e.detail.type);
 			}
 		});
 		vkconnect.send('VKWebAppGetUserInfo', {});
 	}
 
 	go = (e) => {
-		console.log("GO", e);
-		console.log(e.currentTarget.dataset.to);
 		this.setState({ activePanel: e.currentTarget.dataset.to })
 	};
 

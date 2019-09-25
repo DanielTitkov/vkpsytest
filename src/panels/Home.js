@@ -7,6 +7,7 @@ import ErrorSnackbar from '../components/interface/ErrorSnackbar';
 import ActiveInventorySnippet from '../components/inventories/ActiveInventorySnippet';
 import NewInventories from '../components/inventories/NewInventories';
 import DoneInventories from '../components/inventories/DoneInventories';
+import { getCurrentUser } from '../store/actions/userActions';
 
 const mapStateToProps = (state) => {
 	return {
@@ -18,6 +19,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
 		setActivePanel: (panel) => dispatch(setActivePanel(panel)),
+		getCurrentUser: () => dispatch(getCurrentUser()),
     }
 }
 
@@ -25,7 +27,8 @@ const Home = (props) => {
 	const { 
 		id, go, fetchedUser, 
 		openPopout, closePopout, 
-		inventoryError
+		inventoryError,
+		getCurrentUser,
 	} = props;
 
 	const [activeTab, setActiveTab] = useState("new");
@@ -37,6 +40,10 @@ const Home = (props) => {
 			setSnackbar(errorSnackbar)
 		}
 	}, [inventoryError])
+
+	useEffect(() => {
+		getCurrentUser();
+	}, [])
 
 	return (
 		<Panel id={id}>
