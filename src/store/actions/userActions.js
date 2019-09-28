@@ -1,6 +1,7 @@
 import appConfig from "../../config/appConfig"
 import axios from 'axios';
 import vkconnect from '@vkontakte/vk-connect';
+import { getAgeFromBDate } from "../../utils/dateUtils";
 
 export const getCurrentUser = () => {
     return (dispatch, getState) => {
@@ -16,24 +17,17 @@ export const getCurrentUser = () => {
     }
 };
 
-// {
-//     "age": null,
-//     "sex": "",
-//     "city": "",
-//     "country": "",
-//     "timezone": ""
-// }
-
 export const sendCurrentUserData = () => {
     return (dispatch, getState) => {
         const { currentUser } = getState().user;
+        const age = getAgeFromBDate(currentUser.bdate);
         const userData = {
+            age: age ? age : undefined,
             sex: currentUser.sex ? currentUser.sex : undefined,
             city: currentUser.city ? currentUser.city.title : undefined,
             timezone: currentUser.timezone ? currentUser.timezone : undefined,
             country: currentUser.country ? currentUser.country.title : undefined,
         };
-        console.log("USER DATA", userData);
         const { vkquery } = getState().validation;
         const url = appConfig.API_URL;
         axios.post(
